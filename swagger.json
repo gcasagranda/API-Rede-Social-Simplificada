@@ -1,0 +1,542 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API-Tasks-Rede-Social",
+        "description": "API para a implementação de uma rede social simples, com a possibilidade de criação de usuários, posts e comentários.",
+        "version": "1.0.0",
+        "contact": {
+            "name": "Guilherme Marcello Casagranda",
+            "email": "gcasagranda@alunos.utfpr.edu.br"
+        }
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8081",
+            "description": "Servidor Local"
+        }
+    ],
+    "paths": {
+        "/login": {
+            "post": {
+                "summary": "Realiza o login de um usuário",
+                "tags": ["Login"],
+                "requestBody": {
+                    "description": "Dados do usuário",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "example": {
+                                "nickname": "usuario1",
+                                "password": "12345678"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login realizado com sucesso"
+                    },
+                    "400": {
+                        "description": "Usuário não encontrado"
+                    },
+                    "401": {
+                        "description": "Senha incorreta"
+                    }
+                }
+            }
+        },
+        "/logout": {
+            "post": {
+                "summary": "Realiza o logout de um usuário",
+                "tags": ["Login"],
+                "responses": {
+                    "200": {
+                        "description": "Logout bem-sucedido"
+                    }
+                }
+            }
+        },
+        "/signup": {
+            "post": {
+                "summary": "Cria um novo usuário",
+                "tags": ["Usuários"],
+                "requestBody": {
+                    "description": "Dados do usuário",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "example": {
+                                "firstname": "Guilherme",
+                                "lastname": "Casagranda",
+                                "nickname": "gui_casagranda",
+                                "password": "1234"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuário cadastrado com sucesso"
+                    },
+                    "400": {
+                        "description": "Nickname já existente"
+                    }
+                }
+            }
+        },
+        "/user/{nickname}": {
+            "delete": {
+                "summary": "Deleta um usuário",
+                "tags": ["Usuários"],
+                "parameters": [
+                    {
+                    "name": "nickname",
+                    "in": "path",
+                    "required": true,
+                    "type": "string",
+                    "description": "Nickname do usuário a ser deletado"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usuário deletado com sucesso"
+                    },
+                    "403": {
+                        "description": "Você não tem permissão para deletar este usuário"
+                    },
+                    "404": {
+                        "description": "Usuário não encontrado"
+                    }
+                }
+            }
+        },
+        "/user/edit/{originalNickname}": {
+            "put": {
+              "summary": "Edita um usuário",
+              "tags": ["Usuários"],
+              "parameters": [
+                {
+                  "name": "originalNickname",
+                  "in": "path",
+                  "required": true,
+                  "type": "string",
+                  "description": "Nickname original do usuário a ser editado"
+                }],
+                "requestBody": {
+                    "description": "Dados atualizados do usuário",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "example": {
+                                "firstname": "Guilherme",
+                                "lastname": "Casagranda",
+                                "nickname": "gui_casagranda",
+                                "password": "1234"
+                            }
+                        }
+                    }
+                },
+              "responses": {
+                "200": {
+                  "description": "Usuário atualizado com sucesso",
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string"
+                      },
+                      "user": {
+                        "type": "object",
+                        "firstname": "Guilherme",
+                        "lastname": "Casagranda",
+                        "nickname": "gui_casagranda",
+                        "password": "1234"
+                      }
+                    }
+                  }
+                },
+                "403": {
+                  "description": "Você não tem permissão para editar este usuário"
+                },
+                "404": {
+                  "description": "Usuário não encontrado"
+                }
+              }
+            }
+        },
+        "/user/nickname/{nickname}": {
+            "get": {
+              "summary": "Obtém um usuário pelo nickname",
+              "tags": ["Usuários"],
+              "parameters": [
+                {
+                  "name": "nickname",
+                  "in": "path",
+                  "required": true,
+                  "type": "string",
+                  "description": "Nickname do usuário a ser obtido"
+                }],
+              "responses": {
+                "200": {
+                    "schema": {
+                        "_id": "6577c0490f6008d6978e9bd8",
+                        "firstname": "Guilherme",
+                        "lastname": "Casagranda",
+                        "nickname": "gui_casagranda",
+                        "password": "$2b$10$utzI3/AI.KY8SkCG4Ne4g.MhKj4ogWIQE13fbGd/U54NU/6oSVD.2",
+                        "__v": 0,
+                        "totalLikes": 2
+                    }
+                },
+                "404": {
+                  "description": "Usuário não encontrado"
+                }
+              }
+            }
+        },
+        "/user/name/{name}":{
+            "get": {
+                "summary": "Obtém usuários pelo primeiro nome",
+                "tags": ["Usuários"],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "Primeiro nome dos usuário a serem obtidos"
+                    }],
+                "responses": {
+                    "200": {
+                        "schema": [{
+                            "_id": "6577c0490f6008d6978e9bd8",
+                            "firstname": "Guilherme",
+                            "lastname": "Casagranda",
+                            "nickname": "gui_casagranda",
+                            "password": "$2b$10$utzI3/AI.KY8SkCG4Ne4g.MhKj4ogWIQE13fbGd/U54NU/6oSVD.2",
+                            "__v": 0,
+                            "totalLikes": 2
+                        }]
+                    },
+                    "404": {
+                        "description": "Usuários não encontrados"
+                    }
+                }
+            }
+        },
+        "/post":{
+            "post":{
+                "summary": "Cria um novo post",
+                "tags": ["Postagens"],
+                "requestBody":{
+                    "description": "Dados do post",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "example": {
+                                "content": "Conteúdo do post"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Post criado com sucesso"
+                    },
+                    "401": {
+                        "description": "Você não está logado"
+                    }
+                }
+            }
+        },
+        "/post/{id}":{
+            "delete":{
+                "summary": "Deleta um post",
+                "tags": ["Postagens"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "ID do post a ser deletado"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "Post deletado com sucesso"
+                    },
+                    "401": {
+                        "description": "Você não está logado"
+                    },
+                    "403": {
+                        "description": "Você não tem permissão para deletar este post"
+                    },
+                    "404": {
+                        "description": "Post não encontrado"
+                    }
+                }
+            }
+        },
+        "/post/id/{id}":{
+            "get":{
+                "summary": "Obtém um post pelo ID",
+                "tags": ["Postagens"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "ID do post a ser obtido"
+                    }],
+                "responses": {
+                    "200": {
+                        "schema":{
+                            "_id": 4,
+                            "content": "meu segundo post",
+                            "userId": {
+                                "_id": "6577c0490f6008d6978e9bd8",
+                                "nickname": "gui_casagranda"
+                            },
+                            "createdAt": "2023-12-12T03:32:33.661Z",
+                            "likes": [
+                                {
+                                    "likedBy": {
+                                        "_id": "6577e4109a860ec2efc82e37",
+                                        "nickname": "gui_casagranda2"
+                                    }
+                                },
+                                {
+                                    "likedBy": {
+                                        "_id": "6577c0490f6008d6978e9bd8",
+                                        "nickname": "gui_casagranda"
+                                    }
+                                }
+                            ],
+                            "__v": 0
+                        }
+                    },
+                    "404": {
+                        "description": "Post não encontrado"
+                    }
+                }
+            }
+        },
+        "/post/user/{userNickname}":{
+            "get":{
+                "summary": "Obtém os posts de um usuário",
+                "tags": ["Postagens"],
+                "parameters": [
+                    {
+                        "name": "userNickname",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "Nickname do usuário"
+                    }],
+                "responses": {
+                    "200": {
+                        "schema": [{
+                            "_id": 4,
+                            "content": "meu segundo post",
+                            "userId": {
+                                "_id": "6577c0490f6008d6978e9bd8",
+                                "nickname": "gui_casagranda"
+                            },
+                            "createdAt": "2023-12-12T03:32:33.661Z",
+                            "likes": [
+                                {
+                                    "likedBy": {
+                                        "_id": "6577e4109a860ec2efc82e37",
+                                        "nickname": "gui_casagranda2"
+                                    }
+                                },
+                                {
+                                    "likedBy": {
+                                        "_id": "6577c0490f6008d6978e9bd8",
+                                        "nickname": "gui_casagranda"
+                                    }
+                                }
+                            ],
+                            "__v": 0
+                        }]
+                    },
+                    "404": {
+                        "description": "Usuário não encontrado/Posts não encontrados"
+                    }
+                }
+            }
+        },
+        "/commentary/post/{postId}":{
+            "post":{
+                "summary": "Cria um novo comentário",
+                "tags": ["Comentários"],
+                "parameters": [
+                    {
+                        "name": "postId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "ID do post a ser comentado"
+                    }],
+                "requestBody":{
+                    "description": "Dados do comentário",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "example": {
+                                "content": "Conteúdo do comentário"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Comentário criado com sucesso"
+                    },
+                    "401": {
+                        "description": "Usuário não logado"
+                    },
+                    "404": {
+                        "description": "Post não encontrado"
+                    }
+                }
+            },
+            "get":{
+                "summary": "Obtém os comentários de um post",
+                "tags": ["Comentários"],
+                "parameters": [
+                    {
+                        "name": "postId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "ID do post"
+                    }],
+                "responses": {
+                    "200": {
+                        "schema": [
+                            {
+                                "_id": 4,
+                                "content": "legal",
+                                "userId": "6577c0490f6008d6978e9bd8",
+                                "postId": 4,
+                                "createdAt": "2023-12-12T04:37:17.993Z",
+                                "__v": 0
+                            },
+                            {
+                                "_id": 5,
+                                "content": "legal",
+                                "userId": "6577c0490f6008d6978e9bd8",
+                                "postId": 4,
+                                "createdAt": "2023-12-12T04:37:28.454Z",
+                                "__v": 0
+                            }
+                        ]
+                    },
+                    "404": {
+                        "description": "Post não encontrado"
+                    }
+                }
+            }
+        },
+        "/commentary/{commentaryId}":{
+            "delete":{
+                "summary": "Deleta um comentário",
+                "tags": ["Comentários"],
+                "parameters": [
+                    {
+                        "name": "commentaryId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "ID do comentário a ser deletado"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "Comentário deletado com sucesso"
+                    },
+                    "401": {
+                        "description": "Você não está logado"
+                    },
+                    "403": {
+                        "description": "Você não tem permissão para deletar este comentário"
+                    },
+                    "404": {
+                        "description": "Comentário não encontrado"
+                    }
+                }
+            }
+        },
+        "/post/like/{postId}":{
+            "post":{
+                "summary": "Curte uma postagem",
+                "tags": ["Postagens"],
+                "parameters": [
+                    {
+                        "name": "postId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "ID do post a ser curtido"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "Post curtido com sucesso"
+                    },
+                    "401": {
+                        "description": "Você não está logado"
+                    },
+                    "403":{
+                        "description": "Você já curtiu este post"
+                    },
+                    "404": {
+                        "description": "Post não encontrado"
+                    }
+                }
+            }
+        },
+        "/user/popular":{
+            "get":{
+                "summary": "Obtém os 3 usuários mais populares",
+                "tags": ["Usuários"],
+                "responses": {
+                    "200": {
+                        "schema": [
+                            {
+                                "_id": "6577c0490f6008d6978e9bd8",
+                                "firstname": "Guilherme",
+                                "lastname": "Casagranda",
+                                "nickname": "gui_casagranda",
+                                "password": "$2b$10$utzI3/AI.KY8SkCG4Ne4g.MhKj4ogWIQE13fbGd/U54NU/6oSVD.2",
+                                "__v": 0,
+                                "totalLikes": 2
+                            },
+                            {
+                                "_id": "6577e4109a860ec2efc82e37",
+                                "firstname": "Guilherme",
+                                "lastname": "Casagranda",
+                                "nickname": "gui_casagranda2",
+                                "password": "$2b$10$utzI3/AI.KY8SkCG4Ne4g.MhKj4ogWIQE13fbGd/U54NU/6oSVD.2",
+                                "__v": 0,
+                                "totalLikes": 1
+                            },
+                            {
+                                "_id": "6577e4109a860ec2efc82e38",
+                                "firstname": "Guilherme",
+                                "lastname": "Casagranda",
+                                "nickname": "gui_casagranda3",
+                                "password": "$2b$10$utzI3/AI.KY8SkCG4Ne4g.MhKj4ogWIQE13fbGd/U54NU/6oSVD.2",
+                                "__v": 0,
+                                "totalLikes": 0
+                            }
+                        ]
+                    },
+                    "404": {
+                        "description": "Usuários não encontrados"
+                    }
+                }
+            }   
+        }
+    }
+}
